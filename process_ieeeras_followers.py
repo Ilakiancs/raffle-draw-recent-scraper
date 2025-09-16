@@ -29,13 +29,13 @@ def process_ieeeras_followers():
         with open('ieeeras_iit_followers.json', 'r', encoding='utf-8') as f:
             response_data = json.load(f)
     except Exception as e:
-        print(f"❌ Error loading ieeeras_iit followers: {e}")
+        print(f"Error loading ieeeras_iit followers: {e}")
         return
     
     current_time = time.time()
     followers = response_data.get('data', {}).get('items', [])
     
-    print(f"🎯 Processing {len(followers)} REAL followers from @ieeeras_iit...")
+    print(f"Processing {len(followers)} REAL followers from @ieeeras_iit...")
     print("=" * 60)
     
     # Categorize followers by their story activity timestamps
@@ -74,15 +74,15 @@ def process_ieeeras_followers():
             if time_diff_minutes <= 15:
                 processed_follower["time_category"] = "active_15min"
                 activity_counts['active_15min'] += 1
-                recent_activity_found.append(f"  ✨ {processed_follower['full_name'][:30]:30} | Active 15min ago ({story_time})")
+                recent_activity_found.append(f"  {processed_follower['full_name'][:30]:30} | Active 15min ago ({story_time})")
             elif time_diff_minutes <= 30:
                 processed_follower["time_category"] = "active_30min"
                 activity_counts['active_30min'] += 1
-                recent_activity_found.append(f"  🔥 {processed_follower['full_name'][:30]:30} | Active 30min ago ({story_time})")
+                recent_activity_found.append(f"  {processed_follower['full_name'][:30]:30} | Active 30min ago ({story_time})")
             elif time_diff_minutes <= 60:
                 processed_follower["time_category"] = "active_1hour"
                 activity_counts['active_1hour'] += 1
-                recent_activity_found.append(f"  ⚡ {processed_follower['full_name'][:30]:30} | Active 1hour ago ({story_time})")
+                recent_activity_found.append(f"  {processed_follower['full_name'][:30]:30} | Active 1hour ago ({story_time})")
             elif time_diff_minutes <= 1440:  # 24 hours
                 processed_follower["time_category"] = "active_24hour"
                 activity_counts['active_24hour'] += 1
@@ -127,46 +127,46 @@ def process_ieeeras_followers():
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(output_data, f, indent=4, ensure_ascii=False)
-        print(f"✅ Successfully saved {len(categorized_followers)} REAL followers to {output_file}")
+        print(f"Successfully saved {len(categorized_followers)} REAL followers to {output_file}")
     except Exception as e:
-        print(f"❌ Error saving output: {e}")
+        print(f"Error saving output: {e}")
         return
     
     # Print comprehensive report
     print("\n" + "=" * 60)
-    print("🎯 @IEEERAS_IIT REAL FOLLOWERS REPORT")
+    print("@IEEERAS_IIT REAL FOLLOWERS REPORT")
     print("=" * 60)
     
-    print(f"\n⚡ Real Activity Analysis (your actual followers):")
-    print(f"  🔥 Active in last 15min: {activity_counts['active_15min']} followers")
-    print(f"  🔥 Active in last 30min: {activity_counts['active_30min']} followers")
-    print(f"  🔥 Active in last 1hour: {activity_counts['active_1hour']} followers")
-    print(f"  🔥 Active in last 24hour: {activity_counts['active_24hour']} followers")
-    print(f"  😴 No recent activity: {activity_counts['no_activity']} followers")
+    print(f"\nReal Activity Analysis (your actual followers):")
+    print(f"  Active in last 15min: {activity_counts['active_15min']} followers")
+    print(f"  Active in last 30min: {activity_counts['active_30min']} followers")
+    print(f"  Active in last 1hour: {activity_counts['active_1hour']} followers")
+    print(f"  Active in last 24hour: {activity_counts['active_24hour']} followers")
+    print(f"  No recent activity: {activity_counts['no_activity']} followers")
     
-    print(f"\n🎮 Your React App Will Show:")
-    print(f"  ⏰ Last 15 Minutes: {activity_counts['active_15min']} participants")
-    print(f"  ⏰ Last 30 Minutes: {activity_counts['active_30min']} participants")
-    print(f"  ⏰ Last Hour: {activity_counts['active_1hour']} participants")
-    print(f"  ⏰ All Followers: {len(categorized_followers)} participants")
+    print(f"\nYour React App Will Show:")
+    print(f"  Last 15 Minutes: {activity_counts['active_15min']} participants")
+    print(f"  Last 30 Minutes: {activity_counts['active_30min']} participants")
+    print(f"  Last Hour: {activity_counts['active_1hour']} participants")
+    print(f"  All Followers: {len(categorized_followers)} participants")
     
     if recent_activity_found:
-        print(f"\n✨ Recent Activity Detected:")
+        print(f"\nRecent Activity Detected:")
         for activity in recent_activity_found[:10]:  # Show first 10
             print(activity)
         if len(recent_activity_found) > 10:
             print(f"  ... and {len(recent_activity_found) - 10} more")
     
     # Sample real followers
-    print(f"\n👥 Sample Real Followers (from @ieeeras_iit):")
+    print(f"\nSample Real Followers (from @ieeeras_iit):")
     for i, follower in enumerate(categorized_followers[:8], 1):
         name = follower.get('full_name', 'No name')[:25]
         username = follower.get('username', '')[:20] 
-        private = "🔒" if follower.get('is_private') else "🔓"
+        private = "(Private)" if follower.get('is_private') else "(Public)"
         print(f"  {i}. {name:25} (@{username:20}) {private}")
     
-    print(f"\n✅ SUCCESS: Your raffle now uses 100% REAL data from @ieeeras_iit!")
-    print(f"🚀 No fake or demo data - these are your genuine Instagram followers!")
+    print(f"\nSUCCESS: Your raffle now uses 100% REAL data from @ieeeras_iit!")
+    print(f"No fake or demo data - these are your genuine Instagram followers!")
     print("=" * 60)
 
 if __name__ == "__main__":
