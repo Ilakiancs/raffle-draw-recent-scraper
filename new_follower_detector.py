@@ -24,7 +24,7 @@ import argparse
 
 def fetch_fresh_followers():
     """Fetch fresh follower data from Instagram API"""
-    print("🔄 Fetching fresh follower data from Instagram...")
+    print("Fetching fresh follower data from Instagram...")
     
     api_command = [
         'curl', '--request', 'GET',
@@ -38,13 +38,13 @@ def fetch_fresh_followers():
         if result.returncode == 0:
             with open('ieeeras_iit_followers.json', 'w') as f:
                 f.write(result.stdout)
-            print("✅ Fresh data fetched successfully")
+            print("Fresh data fetched successfully")
             return True
         else:
-            print(f"❌ API call failed: {result.stderr}")
+            print(f"API call failed: {result.stderr}")
             return False
     except Exception as e:
-        print(f"❌ Error fetching data: {e}")
+        print(f"Error fetching data: {e}")
         return False
 
 def load_current_followers():
@@ -69,11 +69,11 @@ def load_current_followers():
             }
             follower_list.append(follower_info)
         
-        print(f"📊 Loaded {len(follower_list)} current followers")
+        print(f"Loaded {len(follower_list)} current followers")
         return follower_list
         
     except Exception as e:
-        print(f"❌ Error loading current followers: {e}")
+        print(f"Error loading current followers: {e}")
         return []
 
 def save_baseline_snapshot(followers):
@@ -88,8 +88,8 @@ def save_baseline_snapshot(followers):
     with open('baseline_followers.json', 'w', encoding='utf-8') as f:
         json.dump(snapshot_data, f, indent=2, ensure_ascii=False)
     
-    print(f"💾 Baseline snapshot saved: {len(followers)} followers")
-    print(f"📅 Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Baseline snapshot saved: {len(followers)} followers")
+    print(f"Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 def load_baseline_snapshot():
     """Load previous baseline snapshot"""
@@ -100,14 +100,14 @@ def load_baseline_snapshot():
         baseline_followers = snapshot_data.get('followers', [])
         baseline_date = snapshot_data.get('date', 'Unknown')
         
-        print(f"📂 Loaded baseline: {len(baseline_followers)} followers from {baseline_date}")
+        print(f"Loaded baseline: {len(baseline_followers)} followers from {baseline_date}")
         return baseline_followers
         
     except FileNotFoundError:
-        print("❌ No baseline snapshot found. Run with --create-baseline first.")
+        print("No baseline snapshot found. Run with --create-baseline first.")
         return None
     except Exception as e:
-        print(f"❌ Error loading baseline: {e}")
+        print(f"Error loading baseline: {e}")
         return None
 
 def find_new_followers(current_followers, baseline_followers):
@@ -126,10 +126,10 @@ def find_new_followers(current_followers, baseline_followers):
         if follower['id'] in new_follower_ids
     ]
     
-    print(f"🆕 Found {len(new_followers)} new followers since baseline!")
+    print(f"Found {len(new_followers)} new followers since baseline!")
     
     if new_followers:
-        print("\n🎉 NEW FOLLOWERS:")
+        print("\nNEW FOLLOWERS:")
         print("=" * 50)
         for i, follower in enumerate(new_followers, 1):
             print(f"{i}. @{follower['username']} - {follower['full_name']}")
@@ -157,8 +157,8 @@ def save_new_followers_for_react(new_followers):
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, indent=2, ensure_ascii=False)
     
-    print(f"💾 Saved {len(new_followers)} NEW followers for React app")
-    print(f"📁 File: {output_path}")
+    print(f"Saved {len(new_followers)} NEW followers for React app")
+    print(f"File: {output_path}")
 
 def main():
     parser = argparse.ArgumentParser(description='Detect new Instagram followers')
@@ -172,20 +172,20 @@ def main():
     args = parser.parse_args()
     
     if args.create_baseline:
-        print("🎯 Creating baseline snapshot...")
+        print("Creating baseline snapshot...")
         if not os.path.exists('ieeeras_iit_followers.json'):
-            print("⚠️  No current data found. Fetching fresh data first...")
+            print("No current data found. Fetching fresh data first...")
             if not fetch_fresh_followers():
                 return
         
         current_followers = load_current_followers()
         if current_followers:
             save_baseline_snapshot(current_followers)
-            print("✅ Baseline created successfully!")
-            print("💡 Now you can use --detect-new to find new followers")
+            print("Baseline created successfully!")
+            print("Now you can use --detect-new to find new followers")
     
     elif args.detect_new:
-        print("🔍 Detecting new followers...")
+        print("Detecting new followers...")
         baseline_followers = load_baseline_snapshot()
         if baseline_followers is None:
             return
@@ -198,12 +198,12 @@ def main():
         save_new_followers_for_react(new_followers)
         
         if new_followers:
-            print("🎊 New followers detected and saved for React app!")
+            print("New followers detected and saved for React app!")
         else:
-            print("📭 No new followers found since baseline")
+            print("No new followers found since baseline")
     
     elif args.auto:
-        print("🚀 Auto-detecting new followers...")
+        print("Auto-detecting new followers...")
         
         # Step 1: Fetch fresh data
         if not fetch_fresh_followers():
@@ -212,11 +212,11 @@ def main():
         # Step 2: Load baseline
         baseline_followers = load_baseline_snapshot()
         if baseline_followers is None:
-            print("💡 No baseline found. Creating one now...")
+            print("No baseline found. Creating one now...")
             current_followers = load_current_followers()
             if current_followers:
                 save_baseline_snapshot(current_followers)
-                print("✅ Baseline created. Run --auto again to detect new followers")
+                print("Baseline created. Run --auto again to detect new followers")
             return
         
         # Step 3: Detect new followers
@@ -228,9 +228,9 @@ def main():
         save_new_followers_for_react(new_followers)
         
         if new_followers:
-            print("🎊 New followers detected and ready for raffle!")
+            print("New followers detected and ready for raffle!")
         else:
-            print("📭 No new followers since baseline")
+            print("No new followers since baseline")
     
     else:
         parser.print_help()
