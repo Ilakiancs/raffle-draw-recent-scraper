@@ -28,7 +28,7 @@ def fetch_fresh_followers():
     
     api_command = [
         'curl', '--request', 'GET',
-        '--url', 'https://instagram360.p.rapidapi.com/userfollowers/?username_or_id=ieeeras_iit',
+        '--url', 'https://instagram360.p.rapidapi.com/userfollowers/?username_or_id=put_here',
         '--header', 'x-rapidapi-host: instagram360.p.rapidapi.com',
         '--header', 'x-rapidapi-key: 9d1ccd9d6fmshf515f96baa1683cp14eed1jsn5b6d08cc4694'
     ]
@@ -36,7 +36,7 @@ def fetch_fresh_followers():
     try:
         result = subprocess.run(api_command, capture_output=True, text=True)
         if result.returncode == 0:
-            with open('ieeeras_iit_followers.json', 'w') as f:
+            with open('put_here_followers.json', 'w') as f:
                 f.write(result.stdout)
             print("Fresh data fetched successfully")
             return True
@@ -173,7 +173,7 @@ def main():
     
     if args.create_baseline:
         print("Creating baseline snapshot...")
-        if not os.path.exists('ieeeras_iit_followers.json'):
+        if not os.path.exists('put_here_followers.json'):
             print("No current data found. Fetching fresh data first...")
             if not fetch_fresh_followers():
                 return
